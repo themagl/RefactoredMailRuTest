@@ -24,16 +24,14 @@ public class EmailBoxMainPage extends BasePage<EmailBoxMainPage> {
         messageRows.shouldHaveSize(count);
     }
 
-    @Step("Проверяем, что в письме под номером {} содержится сообщение {}")
+    @Step("Проверяем, что в письме под номером {index} содержится сообщение {message}")
     public void messageContentCheck(int index, String message) {
         messageRows.get(index).should(text(message));
     }
 
     @Step("Переходим на форму создания нового письма")
-    public EmailCreatePage createNewEmail() {
+    public EmailCreatePage createNewEmailForm() {
         newEmailButton.click();
         return page(EmailCreatePage.class);
     }
-
-
 }

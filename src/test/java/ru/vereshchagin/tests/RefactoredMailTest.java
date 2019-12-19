@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.testng.annotations.Test;
 import ru.vereshchagin.pages.EmailBoxMainPage;
+import ru.vereshchagin.pages.EmailCreatePage;
 import ru.vereshchagin.pages.MainPage;
 
 import java.io.IOException;
@@ -41,8 +42,11 @@ public class RefactoredMailTest {
     @Test
     @Step("Входим в почтовый ящик, отправляем себе письмо, затем проверяем его наличие, удаляем его и проверяем наличие в корзине.")
     public void secondTest(){
-        //TODO не забыть про удаление и корзину
-
+        EmailBoxMainPage mainPage = new MainPage().openMainPage().logIntoMail(userLogin, userPassword);
+        EmailCreatePage createPage = mainPage.createNewEmailForm();
+        createPage.sendNewEmail(userLogin, messageSubject, messageText);
+        mainPage = createPage.goInbox();
+        mainPage.messageContentCheck(0, messageText);
     }
 
     @Test

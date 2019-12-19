@@ -11,4 +11,20 @@ public class NavigateMenuBlock extends ElementsContainer {
     private SelenideElement drafts = $x("//span[text()='Черновики']");
     private SelenideElement garbage = $x("//span[text()='Корзина']");
 
+    public void goToInbox() {
+        inbox.click();
+    }
+
+    public void goToSent() {
+        sent.click();
+    }
+
+    public void goToDrafts() {
+        drafts.click();
+    }
+
+    public void goToGarbage() {
+        garbage.click();
+    }
+
 }
