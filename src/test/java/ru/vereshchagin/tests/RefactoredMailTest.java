@@ -11,6 +11,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.vereshchagin.pages.EmailBoxMainPage;
 import ru.vereshchagin.pages.EmailCreatePage;
+import ru.vereshchagin.pages.FolderSettingsPage;
 import ru.vereshchagin.pages.MainPage;
 
 import java.io.IOException;
@@ -34,8 +35,8 @@ public class RefactoredMailTest {
 
     @DataProvider
     public static Object[][] credentialsProvider() {
-        return new Object[][] {
-                {"theselenidetest@mail.ru","Autotest1"},
+        return new Object[][]{
+                {"theselenidetest@mail.ru", "Autotest1"},
         };
     }
 
@@ -53,7 +54,7 @@ public class RefactoredMailTest {
     @Test(dataProvider = "credentialsProvider")
     @Parameters({"Login", "Password"})
     @Step("Входим в почтовый ящик, отправляем себе письмо, затем проверяем его наличие, удаляем его и проверяем наличие в корзине.")
-    public void secondTest(String userLogin, String userPassword){
+    public void secondTest(String userLogin, String userPassword) {
         EmailBoxMainPage mainPage = new MainPage().openMainPage().logIntoMail(userLogin, userPassword);
         EmailCreatePage createPage = mainPage.createNewEmailForm();
         createPage.sendNewEmail(userLogin, messageSubject, messageText);
@@ -67,15 +68,18 @@ public class RefactoredMailTest {
     @Test(dataProvider = "credentialsProvider")
     @Parameters({"Login", "Password"})
     @Step("Создаем письмо и выходим без сохранения. Проверяем папку Черновики на наличие появившегося элемента.")
-    public void thirdTest(String userLogin, String userPassword){
+    public void thirdTest(String userLogin, String userPassword) {
 
     }
 
     @Test(dataProvider = "credentialsProvider")
     @Parameters({"Login", "Password"})
     @Step("Заходим в настройки папок почтового ящика, создаем новую папку, проверяем ее наличие. Затем удаляем ее и проверяем отсутствие.")
-    public void fourthTest(){
-
+    public void fourthTest(String userLogin, String userPassword) {
+        EmailBoxMainPage mainPage = new MainPage().openMainPage().logIntoMail(userLogin, userPassword);
+        FolderSettingsPage settings = mainPage.goToFoldersSettings();
+//        settings.createNewFolder("Folder123");
+//        settings.hoverAndDeleteFolder("Folder123");
     }
 
 

@@ -36,11 +36,6 @@ public class EmailBoxMainPage extends BasePage<EmailBoxMainPage> {
         messageRows.shouldHaveSize(count);
     }
 
-    @Step("Проверяем, что в письме под номером {index} содержится сообщение {message}")
-    public void messageContentCheck(int index, String message) {
-        messageRows.get(index).should(text(message));
-    }
-
     @Step("Переходим на форму создания нового письма")
     public EmailCreatePage createNewEmailForm() {
         newEmailButton.click();
@@ -49,8 +44,6 @@ public class EmailBoxMainPage extends BasePage<EmailBoxMainPage> {
 
     @Step("Удаляем письмо с сообщением {message}")
     public void deleteEmail(String message) {
-//        messageRows.get(index).$x("..//div[@class='b-checkbox__box']").click();
-//        actionBar.deleteButtonClick();
         messageRows.stream().filter((s) -> s.getText().contains(message)).collect(Collectors.toList()).get(0).$x("..//div[@class='b-checkbox__box']").click();
         actionBar.deleteButtonClick();
 
@@ -65,5 +58,11 @@ public class EmailBoxMainPage extends BasePage<EmailBoxMainPage> {
     @Step("Находим в ящике письмо, содержащее {message}")
     public void findMailByText(String message) {
         $x(String.format("//*[text()='%s']", message)).should(visible);
+    }
+
+    @Step("Переходим в Настройки отображения папок")
+    public FolderSettingsPage goToFoldersSettings(){
+        navigate.foldersSettingsClick();
+        return page(FolderSettingsPage.class);
     }
 }

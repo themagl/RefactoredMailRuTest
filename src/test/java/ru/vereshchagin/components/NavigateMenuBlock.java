@@ -10,6 +10,7 @@ public class NavigateMenuBlock extends ElementsContainer {
     private SelenideElement sent = $x("//span[text()='Отправленные']");
     private SelenideElement drafts = $x("//span[text()='Черновики']");
     private SelenideElement garbage = $x("//span[text()='Корзина']");
+    private SelenideElement folderSettingsButton = $x("//span[text()='Настроить папки']");
 
     public void goToInbox() {
         inbox.click();
@@ -25,6 +26,12 @@ public class NavigateMenuBlock extends ElementsContainer {
 
     public void goToGarbage() {
         garbage.click();
+    }
+
+    public void foldersSettingsClick() {
+        $x(String.format("%s/parent::a/parent::div", folderSettingsButton)).hover();
+
+        folderSettingsButton.click();
     }
 
 }
