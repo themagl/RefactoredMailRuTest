@@ -23,7 +23,7 @@ public class EmailCreatePage extends BasePage<EmailCreatePage> {
         emailTakerAdressField.sendKeys(address);
         newMailSubjectField.sendKeys(subject);
         switchTo().frame(iframe);
-        emailMessageField.sendKeys(Keys.PAGE_UP);
+        emailMessageField.clear();
         emailMessageField.sendKeys(message);
         switchTo().defaultContent();
         sendButton.click();

@@ -5,6 +5,9 @@ import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.vereshchagin.pages.EmailBoxMainPage;
 import ru.vereshchagin.pages.EmailCreatePage;
@@ -22,40 +25,54 @@ import static ru.vereshchagin.data.TestData.*;
 
 public class RefactoredMailTest {
 
-    @BeforeEach
+    @BeforeTest
     public void openBrowser() {
         timeout = 10000;
         startMaximized = true;
         browser = "chrome";
     }
 
-    @Test
+    @DataProvider
+    public static Object[][] credentialsProvider() {
+        return new Object[][] {
+                {"theselenidetest@mail.ru","Autotest1"},
+        };
+    }
+
+    @Test(dataProvider = "credentialsProvider")
+    @Parameters({"Login", "Password"})
     @Step("Проверяем валидность логина и пароля, количество писем в ящике и наличие письма с конкретным сообщением.")
-    public void firstTest() {
+    public void firstTest(String userLogin, String userPassword) {
         EmailBoxMainPage mailPage = new MainPage().openMainPage().logIntoMail(userLogin, userPassword);
         mailPage.waitMailBlockDisplayed();
         mailPage.messageListCount(5);
-        mailPage.messageContentCheck(4, piCheck);
+        mailPage.findMailByText(piCheck);
         makeScreen("mainPageScreen");
     }
 
-    @Test
+    @Test(dataProvider = "credentialsProvider")
+    @Parameters({"Login", "Password"})
     @Step("Входим в почтовый ящик, отправляем себе письмо, затем проверяем его наличие, удаляем его и проверяем наличие в корзине.")
-    public void secondTest(){
+    public void secondTest(String userLogin, String userPassword){
         EmailBoxMainPage mainPage = new MainPage().openMainPage().logIntoMail(userLogin, userPassword);
         EmailCreatePage createPage = mainPage.createNewEmailForm();
         createPage.sendNewEmail(userLogin, messageSubject, messageText);
         mainPage = createPage.goInbox();
-        mainPage.messageContentCheck(0, messageText);
+        mainPage.findMailByText(messageText);
+        mainPage.deleteEmail(messageText);
+        mainPage = mainPage.goToGarbage();
+        mainPage.findMailByText(messageText);
     }
 
-    @Test
+    @Test(dataProvider = "credentialsProvider")
+    @Parameters({"Login", "Password"})
     @Step("Создаем письмо и выходим без сохранения. Проверяем папку Черновики на наличие появившегося элемента.")
-    public void thirdTest(){
+    public void thirdTest(String userLogin, String userPassword){
 
     }
 
-    @Test
+    @Test(dataProvider = "credentialsProvider")
+    @Parameters({"Login", "Password"})
     @Step("Заходим в настройки папок почтового ящика, создаем новую папку, проверяем ее наличие. Затем удаляем ее и проверяем отсутствие.")
     public void fourthTest(){
 
